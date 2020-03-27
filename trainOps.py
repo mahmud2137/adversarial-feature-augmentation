@@ -67,6 +67,7 @@ class TrainOps(object):
 
         print('Pretraining feature extractor.')
 
+        self.load_svhn = self.load_mnist
         images, labels = self.load_svhn(self.svhn_dir, split='train')
         test_images, test_labels = self.load_svhn(self.svhn_dir, split='test')
 

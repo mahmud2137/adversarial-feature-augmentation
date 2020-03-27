@@ -7,6 +7,7 @@ flags = tf.app.flags
 flags.DEFINE_string('mode', 'train_feature_extractor',
                     "'train_feature_extractor', 'train_feature_generator' or 'train_DIFA'")
 flags.DEFINE_string('gpu', '0', "'0', '1', '2' or '3'")
+flags.DEFINE_string('data', 'raw', "'raw' or 'encoded'")
 FLAGS = flags.FLAGS
 
 
@@ -22,20 +23,26 @@ def main(_):
         os.makedirs('./model')
     if not os.path.exists('./logs'):
         os.makedirs('./logs')
+    if FLAGS.data == 'raw':
+        mnist_dir='./data/mnist' 
+        svhn_dir='./data/svhn'
+    else:
+        mnist_dir='./data_encoded/mnist'
+        svhn_dir='./data_encoded/svhn'
 
     if FLAGS.mode == 'train_feature_extractor':
         model = Model(mode=FLAGS.mode, learning_rate=0.0003)
-        op = TrainOps(model)
+        op = TrainOps(model, mnist_dir=mnist_dir, svhn_dir=svhn_dir)
         op.train_feature_extractor()
 
     elif FLAGS.mode == 'train_feature_generator':
         model = Model(mode=FLAGS.mode, learning_rate=0.0001)
-        op = TrainOps(model)
+        op = TrainOps(model, mnist_dir=mnist_dir, svhn_dir=svhn_dir)
         op.train_feature_generator()
 
     elif FLAGS.mode == 'train_DIFA':
         model = Model(mode=FLAGS.mode, learning_rate=0.00001)
-        op = TrainOps(model)
+        op = TrainOps(model, mnist_dir=mnist_dir, svhn_dir=svhn_dir)
         op.train_DIFA()
 
     else:
